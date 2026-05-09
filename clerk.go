@@ -2,6 +2,7 @@ package clerkhelper
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"slices"
 	"time"
@@ -71,19 +72,26 @@ func GetUserData(ctx context.Context, userID string) (*ClerkUserData, error) {
 	return userCache.GetUserData(ctx, userID)
 }
 
-func ValidateClerkToken(ctx context.Context, token string, roles []string) bool {
+func ValidateAndGetUserData(ctx context.Context, token string, roles []string) (*ClerkUserData, error) {
 	claims, err := jwt.Verify(ctx, &jwt.VerifyParams{Token: token})
 	if err != nil {
-		return false
+		return nil, err
 	}
 
 	u, err := userCache.GetUserData(ctx, claims.Subject)
 	if err != nil {
-		return false
+		return nil, err
 	}
 
 	if len(roles) > 0 {
-		return slices.Contains(roles, u.Role)
+		if !slices.Contains(roles, u.Role) {
+			return nil, errors.New("forbidden")
+		}
 	}
-	return true
+	return u, nil
+}
+
+func ValidateClerkToken(ctx context.Context, token string, roles []string) bool {
+	_, err := ValidateAndGetUserData(ctx, token, roles)
+	return err == nil
 }
