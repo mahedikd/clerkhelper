@@ -126,6 +126,7 @@ func handleProfile(c echo.Context) error {
 | **GetUserFromContext** | `GetUserFromContext(echo.Context)`      | Retrieves `ClerkUserData` from the Echo context.       |
 | **GetUserData**        | `GetUserData(context.Context, string)`  | Fetches cached user data directly using a User ID.     |
 | **ValidateClerkToken** | `ValidateClerkToken(ctx, token, roles)` | Manual token verification and role checking.           |
+| **InvalidateCache**    | `InvalidateCache(string)`               | Evicts a user from the in-memory cache (next fetch hits Clerk API). Useful after metadata updates. |
 | **StartCacheCleanup**  | `StartCacheCleanup()`                   | Returns a function to gracefully close the cache.      |
 
 ## Data Structures

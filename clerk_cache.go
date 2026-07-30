@@ -97,6 +97,12 @@ func (uc *UserCache) GetUserData(ctx context.Context, userID string) (*ClerkUser
 	return value.(*ClerkUserData), nil
 }
 
+func InvalidateCache(userID string) {
+	if userCache.cache != nil {
+		userCache.cache.Del(userID)
+	}
+}
+
 func StartCacheCleanup() func() {
 	return func() {
 		if userCache.cache != nil {
