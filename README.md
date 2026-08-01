@@ -128,6 +128,7 @@ func handleProfile(c echo.Context) error {
 | **ValidateClerkToken** | `ValidateClerkToken(ctx, token, roles)` | Manual token verification and role checking.           |
 | **InvalidateCache**    | `InvalidateCache(string)`               | Evicts a user from the in-memory cache (next fetch hits Clerk API). Useful after metadata updates. |
 | **StartCacheCleanup**  | `StartCacheCleanup()`                   | Returns a function to gracefully close the cache.      |
+| **VerifySvixSignature** | `VerifySvixSignature(payload []byte, svixID, svixTimestamp, svixSignature, secret string) error` | Verifies a Clerk/Svix webhook request (HMAC-SHA256 over `id.timestamp.payload`, base64 `v1,` signatures, `whsec_<key>` secrets). |
 
 ## Data Structures
 
